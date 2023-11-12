@@ -7,11 +7,11 @@ use application\core\Controller;
 class AccountController extends Controller {
 
 	public function loginAction() {
-		$this->view->render('Вход');
+		$this->view->render('Вхід');
 	}
 
 	public function registerAction() {
-		$this->view->render('Регистрация');
+		$this->view->render('Регістрация');
 	}
 
 }
