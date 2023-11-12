@@ -1,0 +1,57 @@
+version: '3.5'
+
+services:
+  php:
+    container_name: php-mvc
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./application:/var/www/application
+      - ./public:/var/www/html
+    ports:
+      - "8084:8000"
+    networks:
+      - app-network
+
+  nginx:
+    container_name: nginx-mvc
+    build:
+      context: .
+      dockerfile: DockerfileNginx
+    ports:
+      - "8083:80"
+
+  db:
+    image: mysql:latest
+    container_name: mysql-mvc
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mvc
+      MYSQL_USER: rooter
+      MYSQL_PASSWORD: qwerty
+    ports:
+      - "3306:3306"
+    depends_on:
+      - php
+    networks:
+      - app-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-mvc
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ABSOLUTE_URI: /
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
